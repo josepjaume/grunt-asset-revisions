@@ -36,7 +36,7 @@ module.exports = function(grunt) {
      */
 
     this.files.forEach(function(f) {
-      var assets = [];
+      var assets = {};
 
       /**
        * Is the destination a file, if so we cannnot save to it.
@@ -62,7 +62,6 @@ module.exports = function(grunt) {
         return true;
       }).forEach(function(file) {
         var r = revision(file);
-        var map = {};
 
         if(f.dest) {
           if(f.flatten) {
@@ -77,8 +76,7 @@ module.exports = function(grunt) {
           grunt.log.write(file + ' renamed to ').oklns(r);
         }
 
-        map[file] = r;
-        assets.push(map);
+        assets[file] = r;
       });
 
       if(options.manifest) {
@@ -117,4 +115,4 @@ module.exports = function(grunt) {
     return h.digest('hex');
   }
 
-};
+}
