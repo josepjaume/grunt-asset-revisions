@@ -35,9 +35,9 @@ module.exports = function(grunt) {
      * directory `f.dest`
      */
 
-    this.files.forEach(function(f) {
-      var assets = {};
+    var assets = {};
 
+    this.files.forEach(function(f) {
       /**
        * Is the destination a file, if so we cannnot save to it.
        */
@@ -68,7 +68,6 @@ module.exports = function(grunt) {
             r = path.basename(r);
           }
 
-          r = path.join(f.dest, r);
           grunt.file.copy(file, r);
           grunt.log.write(file + ' ').oklns(r);
         } else {
@@ -76,13 +75,21 @@ module.exports = function(grunt) {
           grunt.log.write(file + ' renamed to ').oklns(r);
         }
 
+        if (options.manifestPathExclude) {
+          var regexToExclude = new RegExp(options.manifestPathExclude);
+          file = file.replace(regexToExclude, "");
+          r = r.replace(regexToExclude, "");
+        }
+
         assets[file] = r;
       });
 
-      if(options.manifest) {
-        grunt.file.write(path.join(f.dest, 'manifest.json'), JSON.stringify(assets, null, ' '));
-      }
     });
+
+    if(options.manifest) {
+      var manifestPath = path.join(options.manifestPath, 'manifest.json');
+      grunt.file.write(manifestPath, JSON.stringify(assets, null, ' '));
+    }
   });
 
   /**
