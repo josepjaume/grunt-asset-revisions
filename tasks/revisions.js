@@ -35,7 +35,15 @@ module.exports = function(grunt) {
      * directory `f.dest`
      */
 
-    var assets = {};
+    var assets;
+
+    manifestFile = path.join(options.manifestPath, 'manifest.json');
+    if (grunt.file.isFile(manifestFile)) {
+      assets = grunt.file.readJSON(manifestFile);
+    } else {
+      assets = {};
+    }
+
 
     this.files.forEach(function(f) {
       /**
@@ -101,11 +109,12 @@ module.exports = function(grunt) {
    */
 
   function revision(file) {
-    var h = hash(file).slice(0, 6),
-        ext = path.extname(file).slice(1),
-        base = file.replace(/\.[A-Za-z0-9]*$/, '');
+    var h = hash(file),
+    ext = path.extname(file).slice(1),
+    base = file.replace(/\.[A-Za-z0-9]*$/, '');
 
-    return [base, h, ext].join('.');
+    var newName = [base, h].join('-');
+    return [newName, ext].join('.');
   }
 
   /**
