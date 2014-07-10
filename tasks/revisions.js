@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 
     var assets;
 
-    manifestFile = path.join(options.manifestPath, 'manifest.json');
+    manifestFile = path.join(options.manifestPath, options.manifestName);
     if (grunt.file.isFile(manifestFile)) {
       assets = grunt.file.readJSON(manifestFile);
     } else {
@@ -95,7 +95,7 @@ module.exports = function(grunt) {
     });
 
     if(options.manifest) {
-      var manifestPath = path.join(options.manifestPath, 'manifest.json');
+      var manifestPath = path.join(options.manifestPath, options.manifestName);
       grunt.file.write(manifestPath, JSON.stringify(assets, null, ' '));
     }
   });
